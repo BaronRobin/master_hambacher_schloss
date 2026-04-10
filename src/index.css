@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700&display=swap');
 
 :root {
-  /* Dynamic Castle & Democracy Theme */
-  --bg-gradient-start: #0f172a;
-  --bg-gradient-end: #1e293b;
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
+  /* Dynamic Castle & Democracy Theme - Light Mode */
+  --bg-gradient-start: #f8fafc;
+  --bg-gradient-end: #e2e8f0;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
   --accent-color: #f59e0b;
   --danger-color: #ef4444;
   --success-color: #10b981;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-main: #0f172a;
+  --text-muted: #475569;
   
-  --glass-bg: rgba(30, 41, 59, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
   
   --ui-radius: 16px;
   --font-body: 'Inter', sans-serif;
@@ -101,10 +101,10 @@ p { line-height: 1.6; color: var(--text-muted); }
 .input-field {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(255, 255, 255, 0.6);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
-  color: white;
+  color: var(--text-main);
   font-family: var(--font-body);
   transition: border-color 0.2s ease;
 }

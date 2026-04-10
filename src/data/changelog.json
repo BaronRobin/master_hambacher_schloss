@@ -1,0 +1,41 @@
+[
+  {
+    "version": "0.0.1",
+    "date": "2026-04-07",
+    "changes": [
+      "Initial scaffolding of Hambacher Schloss Democracy Simulator",
+      "Core 3D block geometry rendering layer initialized",
+      "2D 6-sided texture drawing canvas customizer implemented"
+    ]
+  },
+  {
+    "version": "0.0.2",
+    "date": "2026-04-09",
+    "changes": [
+      "Designed constrained physics placement engine (floor and Z-stacking only)",
+      "Unified Ticket Check-In workflow foundation established",
+      "ViewMode default 3D landscape layout instantiated"
+    ]
+  },
+  {
+    "version": "0.0.3",
+    "date": "2026-04-10",
+    "changes": [
+      "Integrated national flag icons for multi-language toggle module",
+      "Built Global Grid Footer for Terms of Service, Privacy logic, and dynamic changelog",
+      "Activated ViewMode camera-focus mechanic highlighting targeted blocks",
+      "Base64 WebP recursive canvas compression added to Editor pipeline",
+      "Configured secure zero-downtime Supabase schema and Edge functions"
+    ]
+  },
+  {
+    "version": "0.0.4",
+    "date": "April 11, 2026",
+    "changes": [
+      "Integrated live Supabase Postgres database connection.",
+      "Rebuilt texture mappings into a 6-face UV Atlas architecture.",
+      "Implemented default Light Mode design aesthetic.",
+      "Updated transparent Hambacher Schloss logo."
+    ]
+  }
+]

@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Fallback to placeholders so the app doesn't crash before environment variables are configured
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
+// .env has the property named VITE_SUPABASE_PUBLISHABLE_KEY, so we must bind specifically to that!
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

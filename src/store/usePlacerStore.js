@@ -1,42 +1,46 @@
 import { create } from 'zustand';
+import { supabase } from '../lib/supabase';
 
-// Assuming blocks are [4, 2, 2]
-// Grid step sizes:
 const STEP_X = 4;
-const STEP_Y = 2; // Height
+const STEP_Y = 2; 
 const STEP_Z = 2;
-
-// The ground is at Y=0. A block with height 2 resting on the ground has its center at Y=1.
 const GROUND_Y = 1;
 
 export const usePlacerStore = create((set, get) => ({
-  placedBlocks: [
-    // Pre-place a few foundation blocks for context
-    { id: 'b1', position: [0, GROUND_Y, 0], color: '#f59e0b' },
-    { id: 'b2', position: [4, GROUND_Y, 0], color: '#3b82f6' },
-  ],
+  placedBlocks: [],
+  activeTicket: null,
   
-  previewPosition: null, // The location the user has currently selected
+  setActiveTicket: (ticket) => set({ activeTicket: ticket }),
+
+  fetchBlocks: async () => {
+    const { data, error } = await supabase.from('blocks').select('*').eq('is_approved', true);
+    if (!error && data) {
+      const parsedBlocks = data.map(dbBlock => ({
+        id: dbBlock.id,
+        position: [dbBlock.x, dbBlock.y, dbBlock.z],
+        textureUrl: dbBlock.texture_url,
+        nickname: dbBlock.nickname,
+        color: '#ffffff'
+      }));
+      set({ placedBlocks: parsedBlocks });
+    }
+  },
+
+  previewPosition: null,
 
   setPreviewPosition: (pos) => set({ previewPosition: pos }),
 
-  // Basic Physics Validation
-  // A position [x,y,z] is valid if:
-  // 1. y === GROUND_Y (resting on floor)
-  // 2. OR there is a block underneath it at [x, y - STEP_Y, z]
   isValidPosition: (pos) => {
     const [x, y, z] = pos;
     if (y === GROUND_Y) return true;
     
     const { placedBlocks } = get();
-    // Check if there is a block exactly underneath
     const hasSupport = placedBlocks.some(b => 
       b.position[0] === x && 
       b.position[1] === y - STEP_Y && 
       b.position[2] === z
     );
     
-    // Also ensuring no block is already there
     const isOccupied = placedBlocks.some(b => 
       b.position[0] === x && 
       b.position[1] === y && 
@@ -46,26 +50,50 @@ export const usePlacerStore = create((set, get) => ({
     return hasSupport && !isOccupied;
   },
 
-  confirmPlacement: (textureUrl) => {
-    const { previewPosition, placedBlocks, isValidPosition } = get();
-    if (!previewPosition || !isValidPosition(previewPosition)) return false;
+  confirmPlacement: async (textureUrlStr, nicknameInput = 'Digital Contributor') => {
+    const { previewPosition, placedBlocks, isValidPosition, activeTicket } = get();
+    if (!previewPosition) return { success: false, reason: 'No block position actively selected' };
+    if (!isValidPosition(previewPosition)) return { success: false, reason: 'Invalid placement physics / overlapping slot' };
     
-    // In final version we read 'texture_url' after WebP upload to Supabase.
-    // For now we mock it by fetching the 'front' face from useEditorStore directly
+    const [x, y, z] = previewPosition;
+
+    // Insert block into Supabase
+    const { data: newDbBlock, error } = await supabase.from('blocks').insert({
+      ticket_id: activeTicket ? activeTicket.id : null,
+      nickname: nicknameInput || 'Anonymous',
+      x, y, z,
+      texture_url: typeof textureUrlStr === 'string' ? textureUrlStr : '',
+      is_approved: true // Allow immediate local rendering
+    }).select().single();
+
+    if (error) {
+       console.error("Insertion failed:", error);
+       return { success: false, reason: error.message || JSON.stringify(error) };
+    }
+
+    if (activeTicket) {
+      const { error: ticketError } = await supabase.from('tickets').update({ is_used: true }).eq('id', activeTicket.id);
+      if (ticketError) {
+        return { success: false, reason: `Failed to mark ticket used: ${ticketError.message}` };
+      }
+    }
+
+    // Append optimistically to local UI
     const newBlock = { 
-      id: `u_${Date.now()}`, 
-      position: previewPosition, 
-      color: textureUrl ? '#ffffff' : '#10b981',
-      textureUrl: textureUrl,
-      nickname: 'Anonymous Contributor'
+      id: newDbBlock.id, 
+      position: [x, y, z], 
+      color: '#ffffff',
+      textureUrl: typeof textureUrlStr === 'string' ? textureUrlStr : '',
+      nickname: nicknameInput
     };
     
     set({
       placedBlocks: [...placedBlocks, newBlock],
-      previewPosition: null
+      previewPosition: null,
+      activeTicket: null
     });
     
-    return true;
+    return { success: true };
   },
 
   focusedBlockId: null,

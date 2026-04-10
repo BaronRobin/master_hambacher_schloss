@@ -126,11 +126,43 @@ export const useEditorStore = create((set, get) => ({
     set({ lastUpdate: Date.now() });
   },
 
-  // Flattens the front face into a WebP data URL for DB saving and Placer viewing
-  exportFrontTextureWebP: () => {
-    const canvas = get().faceDataRefs['front'];
-    if (!canvas) return null;
-    return canvas.toDataURL('image/webp', 0.8);
+  // Stitches all 6 faces into a single Texture Atlas Sprite Sheet for DB saving
+  exportTexturesAtlasWebP: () => {
+    const refs = get().faceDataRefs;
+    
+    // Atlas layout dimensions
+    // Layout: 
+    // Row 1: Left (200x200), Front (400x200), Right (200x200), Back (400x200)
+    // Row 2: Empty (200x200), Top (400x200), Bottom (400x200), Empty (200x200)
+    // Dimensions: Width = 1200, Height = 400
+    const atlasCanvas = document.createElement('canvas');
+    atlasCanvas.width = 1200;
+    atlasCanvas.height = 400;
+    const ctx = atlasCanvas.getContext('2d');
+    
+    // Pre-fill white background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 1200, 400);
+
+    // Blit pieces if they exist
+    if (refs['left']) ctx.drawImage(refs['left'], 0, 0);          // +X offset 0
+    if (refs['front']) ctx.drawImage(refs['front'], 200, 0);      // +Z offset 200
+    if (refs['right']) ctx.drawImage(refs['right'], 600, 0);      // -X offset 600
+    if (refs['back']) ctx.drawImage(refs['back'], 800, 0);        // -Z offset 800
+    if (refs['top']) ctx.drawImage(refs['top'], 200, 200);        // +Y offset 200, 200
+    if (refs['bottom']) ctx.drawImage(refs['bottom'], 600, 200);  // -Y offset 600, 200
+
+    let dataUrl = atlasCanvas.toDataURL('image/webp', 0.8);
+    if (!dataUrl || dataUrl === 'data:,') dataUrl = atlasCanvas.toDataURL('image/png');
+    return dataUrl;
+  },
+
+  savedTextureStr: null,
+  
+  snapshotTextures: () => {
+    const { exportTexturesAtlasWebP } = get();
+    const payload = exportTexturesAtlasWebP();
+    set({ savedTextureStr: payload });
   }
 }));
 

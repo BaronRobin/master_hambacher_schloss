@@ -4,6 +4,87 @@ import { OrbitControls, Edges } from '@react-three/drei';
 import { usePlacerStore } from '../store/usePlacerStore';
 import * as THREE from 'three';
 
+const PlacedBlock = ({ block, isViewMode, isFocused, isFaded, setFocusedBlockId }) => {
+  const [materials, setMaterials] = React.useState(null);
+
+  React.useEffect(() => {
+    if (block.textureUrl) {
+      new THREE.TextureLoader().load(block.textureUrl, (loadedTex) => {
+        loadedTex.colorSpace = THREE.SRGBColorSpace;
+        
+        // Atlas dimensions: 1200 x 400
+        // Helper to slice texture for each face
+        const sliceTexture = (ox, oy, w, h) => {
+           const tex = loadedTex.clone();
+           tex.needsUpdate = true;
+           tex.repeat.set(w / 1200, h / 400);
+           // Y starting offset is from bottom-left natively in WebGL
+           tex.offset.set(ox / 1200, 1 - (oy + h) / 400); 
+           return new THREE.MeshStandardMaterial({ 
+             map: tex, 
+             transparent: isFaded, 
+             opacity: isFaded ? 0.2 : 1 
+           });
+        };
+
+        // BoxGeometry material array order: Right, Left, Top, Bottom, Front, Back
+        // Right (+X) 2x2
+        const matRight = sliceTexture(600, 0, 200, 200);
+        // Left (-X) 2x2
+        const matLeft = sliceTexture(0, 0, 200, 200);
+        // Top (+Y) 4x2
+        const matTop = sliceTexture(200, 200, 400, 200);
+        // Bottom (-Y) 4x2
+        const matBottom = sliceTexture(600, 200, 400, 200);
+        // Front (+Z) 4x2
+        const matFront = sliceTexture(200, 0, 400, 200);
+        // Back (-Z) 4x2
+        const matBack = sliceTexture(800, 0, 400, 200);
+
+        setMaterials([matRight, matLeft, matTop, matBottom, matFront, matBack]);
+      });
+    } else {
+      // Fallback block if no texture string exists
+      const fallback = new THREE.MeshStandardMaterial({ 
+        color: block.color, 
+        transparent: isFaded, 
+        opacity: isFaded ? 0.2 : 1 
+      });
+      setMaterials(fallback);
+    }
+  }, [block.textureUrl, isFaded, block.color]);
+
+  return (
+    <mesh 
+      position={block.position} 
+      castShadow 
+      receiveShadow
+      onClick={(e) => {
+        if (isViewMode) {
+          e.stopPropagation();
+          setFocusedBlockId(isFocused ? null : block.id);
+        }
+      }}
+      onPointerOver={(e) => {
+        if (isViewMode) {
+          e.stopPropagation();
+          document.body.style.cursor = 'pointer';
+        }
+      }}
+      onPointerOut={() => {
+        if (isViewMode) document.body.style.cursor = 'auto';
+      }}
+    >
+      <boxGeometry args={[4, 2, 2]} />
+      {materials 
+        ? <primitive object={materials} attach="material" />
+        : <meshStandardMaterial color={block.color || "#ffffff"} transparent={isFaded} opacity={isFaded ? 0.2 : 1} />
+      }
+      <Edges color="#1e293b" opacity={isFaded ? 0.05 : 0.3} transparent />
+    </mesh>
+  );
+};
+
 // Component rendering already locked-in blocks
 const PlacedBlocks = ({ isViewMode }) => {
   const placedBlocks = usePlacerStore(state => state.placedBlocks);
@@ -12,42 +93,16 @@ const PlacedBlocks = ({ isViewMode }) => {
   
   return (
     <>
-      {placedBlocks.map((block) => {
-        const isFocused = focusedBlockId === block.id;
-        const isFaded = focusedBlockId && !isFocused;
-        
-        return (
-          <mesh 
-            key={block.id} 
-            position={block.position} 
-            castShadow 
-            receiveShadow
-            onClick={(e) => {
-              if (isViewMode) {
-                e.stopPropagation();
-                setFocusedBlockId(isFocused ? null : block.id);
-              }
-            }}
-            onPointerOver={(e) => {
-              if (isViewMode) {
-                e.stopPropagation();
-                document.body.style.cursor = 'pointer';
-              }
-            }}
-            onPointerOut={() => {
-              if (isViewMode) document.body.style.cursor = 'auto';
-            }}
-          >
-            <boxGeometry args={[4, 2, 2]} />
-            <meshStandardMaterial 
-               color={block.color} 
-               transparent={isFaded} 
-               opacity={isFaded ? 0.2 : 1}
-            />
-            <Edges color="#1e293b" opacity={isFaded ? 0.05 : 0.3} transparent />
-          </mesh>
-        )
-      })}
+      {placedBlocks.map((block) => (
+        <PlacedBlock 
+          key={block.id} 
+          block={block} 
+          isViewMode={isViewMode}
+          isFocused={focusedBlockId === block.id}
+          isFaded={focusedBlockId && focusedBlockId !== block.id}
+          setFocusedBlockId={setFocusedBlockId}
+        />
+      ))}
     </>
   );
 };
@@ -135,11 +190,6 @@ const Placer3D = ({ isViewMode = false }) => {
            maxDistance={50}
         />
       </Canvas>
-      <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', pointerEvents: 'none' }}>
-         <div className="glass-panel" style={{ padding: '0.8rem 1.5rem', color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
-           {isViewMode ? "Explore the castle! Click a block to inspect it." : "Click a translucent slot to place your block"}
-         </div>
-      </div>
     </div>
   );
 };
