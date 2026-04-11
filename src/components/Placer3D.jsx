@@ -80,7 +80,7 @@ const PlacedBlock = ({ block, isViewMode, isFocused, isFaded, setFocusedBlockId 
         ? <primitive object={materials} attach="material" />
         : <meshStandardMaterial color={block.color || "#ffffff"} transparent={isFaded} opacity={isFaded ? 0.2 : 1} />
       }
-      <Edges color="#1e293b" opacity={isFaded ? 0.05 : 0.3} transparent />
+      <Edges color="#c69c79" opacity={isFaded ? 0.05 : 0.3} transparent />
     </mesh>
   );
 };
@@ -141,12 +141,12 @@ const GridAnchors = () => {
           >
             <boxGeometry args={[4, 2, 2]} />
             <meshBasicMaterial 
-              color={isSelected ? '#3b82f6' : '#94a3b8'} 
+              color={isSelected ? '#c69c79' : '#94a3b8'} 
               transparent 
               opacity={isSelected ? 0.6 : 0.15} 
               depthWrite={false}
             />
-            <Edges color={isSelected ? '#60a5fa' : '#ffffff'} />
+            <Edges color={isSelected ? '#c69c79' : '#ffffff'} />
           </mesh>
         );
       })}
@@ -158,8 +158,8 @@ const GridAnchors = () => {
 const Ground = () => (
   <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
     <planeGeometry args={[100, 100]} />
-    <meshStandardMaterial color="#0f172a" />
-    <gridHelper args={[100, 25, '#1e293b', '#1e293b']} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.01]} />
+    <meshStandardMaterial color="#f0eee6" />
+    <gridHelper args={[100, 25, '#c69c79', '#c69c79']} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.01]} />
   </mesh>
 );
 

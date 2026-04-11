@@ -1,16 +1,38 @@
-# React + Vite
+# Hambacher Schloss Democracy Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive 3D web application allowing visitors to participate in a collective digital construction project at the Hambacher Schloss.
 
-Currently, two official plugins are available:
+![Project Preview](https://raw.githubusercontent.com/BaronRobin/master_hambacher_schloss/main/public/preview.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Overview
 
-## React Compiler
+The **Hambacher Schloss Democracy Simulator** is a digital installation where users can check in via a ticket, customize a digital "building block," and integrate it into a virtual representation of the castle walls. It serves as a symbolic gesture of collective participation and democracy.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- **Interactive 3D Simulation**: High-fidelity 3D model of the Hambacher Schloss using Three.js and React Three Fiber.
+- **Block Customization**: Tools to paint, texture, and add text to your own digital block.
+- **Persistent Backend**: Block data and positions are stored in Supabase, creating a living, growing collective structure.
+- **Multilingual Support**: Fully localized in German and English via i18next.
+- **Mobile Responsive**: Designed to work seamlessly on both desktop and mobile devices.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- **Frontend**: [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- **3D Engine**: [Three.js](https://threejs.org/) / [@react-three/fiber](https://github.com/pmndrs/react-three-fiber)
+- **Database**: [Supabase](https://supabase.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Styling**: Vanilla CSS
+
+## Photo Credits
+
+> **Copyright ©**
+>
+> [[Photographer Name]]<br>
+> ([Link to Portfolio])
+>
+> All rights reserved.
+
+## License
+
+This project is prepared for the Hambacher Schloss. All rights reserved.

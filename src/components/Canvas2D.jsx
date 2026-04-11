@@ -3,7 +3,7 @@ import { useEditorStore, FACE_SIZES } from '../store/useEditorStore';
 import { useTranslation } from 'react-i18next';
 import { Paintbrush, Eraser, Undo, Check } from 'lucide-react';
 
-const availableColors = ['#000000', '#f8fafc', '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#1e293b'];
+const availableColors = ['#000000', '#f8fafc', '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#c69c79'];
 const faces = [
   { id: 'front', labelKey: 'editor.outfacing' },
   { id: 'back', labelKey: 'Back' },
@@ -27,10 +27,10 @@ const Canvas2D = () => {
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h3 style={{ margin: 0 }}>{t('editor.title')}</h3>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-           <button onClick={() => useEditorStore.getState().undo()} className="btn" style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.1)' }} title="Undo"><Undo size={16} /></button>
-           <button onClick={() => useEditorStore.getState().redo()} className="btn" style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.1)', transform: 'scaleX(-1)' }} title="Redo"><Undo size={16} /></button>
-           <button onClick={() => useEditorStore.getState().clearFace(activeFace)} className="btn btn-danger" style={{ padding: '0.4rem' }} title="Clear Face"><Eraser size={16} /></button>
+        <div style={{ display: 'flex', gap: '0.4rem' }}>
+           <button onClick={() => useEditorStore.getState().undo()} className="btn" style={{ padding: '0.4rem', fontSize: '0.7rem' }} title="Undo"><Undo size={14} /></button>
+           <button onClick={() => useEditorStore.getState().redo()} className="btn" style={{ padding: '0.4rem', fontSize: '0.7rem', transform: 'scaleX(-1)' }} title="Redo"><Undo size={14} /></button>
+           <button onClick={() => useEditorStore.getState().clearFace(activeFace)} className="btn btn-danger" style={{ padding: '0.4rem', fontSize: '0.7rem' }} title="Clear Face"><Eraser size={14} /></button>
         </div>
       </div>
 
@@ -40,9 +40,10 @@ const Canvas2D = () => {
              key={f.id} 
              onClick={() => setActiveFace(f.id)}
              style={{
-               background: activeFace === f.id ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)',
-               border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', color: 'white', cursor: 'pointer',
-               flex: '1 1 30%', fontSize: '0.85rem'
+               background: activeFace === f.id ? 'var(--primary-color)' : 'transparent',
+               border: activeFace === f.id ? '1px solid var(--primary-color)' : '1px solid var(--glass-border)',
+               padding: '0.4rem 0.8rem', borderRadius: '0px', color: activeFace === f.id ? 'white' : 'var(--text-main)', cursor: 'pointer',
+               flex: '1 1 30%', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase'
              }}
           >
             {f.id === 'front' ? t(f.labelKey) : f.id.toUpperCase()} 
@@ -51,7 +52,7 @@ const Canvas2D = () => {
       </div>
 
       {/* Render the hidden canvases and the visible one */}
-      <div style={{ background: '#fff', borderRadius: '8px', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+      <div style={{ background: '#fff', border: '1px solid var(--glass-border)', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
          {faces.map(f => (
             <FaceCanvas key={f.id} faceId={f.id} active={activeFace === f.id} />
          ))}

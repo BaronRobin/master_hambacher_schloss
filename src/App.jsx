@@ -13,10 +13,10 @@ const SimpleModal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto' }} onClick={onClose}>
-      <div className="glass-panel animate-fade-in" style={{ padding: '2rem', maxWidth: '600px', width: '90%', maxHeight: '80vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
-         <h2 style={{ marginBottom: '1rem' }}>{title}</h2>
-         <div style={{ color: 'var(--text-muted)' }}>{children}</div>
-         <button className="btn mt-4" style={{ width: '100%', marginTop: '1.5rem', background: 'rgba(255,255,255,0.1)' }} onClick={onClose}>Close</button>
+      <div className="glass-panel animate-fade-in" style={{ padding: '2.5rem', maxWidth: '600px', width: '90%', maxHeight: '80vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
+         <h2 style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--primary-color)', paddingBottom: '0.5rem' }}>{title}</h2>
+         <div style={{ color: 'var(--text-main)', fontSize: '1rem' }}>{children}</div>
+         <button className="btn mt-4" style={{ width: '100%', marginTop: '2rem' }} onClick={onClose}>Close</button>
       </div>
     </div>
   );
@@ -29,30 +29,36 @@ const GlobalFooter = () => {
   return (
     <>
       <div className="glass-panel" style={{ 
-         position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', 
-         width: 'calc(100% - 2rem)', maxWidth: '1800px',
+         position: 'absolute', bottom: 0, left: 0, 
+         width: '100%',
          padding: '0.8rem 2rem', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
-         pointerEvents: 'auto', zIndex: 50, borderRadius: '12px'
+         pointerEvents: 'auto', zIndex: 50, borderLeft: 'none', borderRight: 'none', borderBottom: 'none'
       }}>
          <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.85rem', alignItems: 'center', justifyContent: 'flex-start' }}>
-           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'white'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('privacy')}>Privacy Policy</span>
+           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'var(--primary-color)'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('privacy')}>Privacy Policy</span>
            <span style={{ lineHeight: 1 }}>·</span>
-           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'white'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('imprint')}>Imprint</span>
+           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'var(--primary-color)'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('imprint')}>Imprint</span>
            <span style={{ lineHeight: 1 }}>·</span>
-           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'white'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('terms')}>Terms of Service</span>
+           <span style={{ cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1 }} onMouseOver={e => e.target.style.color = 'var(--primary-color)'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'} onClick={() => setModalContent('terms')}>Terms of Service</span>
          </div>
          
          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
            <button 
              onClick={() => setModalContent('changelog')}
              style={{ 
-               background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', 
-               color: 'var(--text-main)', borderRadius: '6px', padding: '0.2rem 0.6rem', fontSize: '0.8rem', cursor: 'pointer', lineHeight: 1
+               background: 'transparent', border: '1px solid var(--primary-color)', 
+               color: 'var(--primary-color)', padding: '0.2rem 0.6rem', fontSize: '0.8rem', cursor: 'pointer', lineHeight: 1
              }}>v{currentVersion}</button>
          </div>
 
-         <div style={{ fontStyle: 'italic', color: 'var(--text-muted)', fontSize: '0.85rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', lineHeight: 1 }}>
-           Hochschule Kaiserslautern - Robin Baron & Joel Rummer
+         <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', lineHeight: 1, gap: '0.3rem' }}>
+           <a href="https://hs-kl.de/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}>Hochschule Kaiserslautern</a>
+           &
+           <a href="https://hambacher-schloss.de/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}>Hambacher Schloss</a>
+           -
+           <a href="https://baronrobin.github.io" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>Robin Baron</a>
+           &
+           <a href="https://mrjoru.github.io/Portfolio/JJR_Home.html#JJR_Home" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>Joel Rummer</a>
          </div>
       </div>
 
@@ -90,24 +96,24 @@ const GlobalFooter = () => {
 const TopNavBar = () => {
   const { t, i18n } = useTranslation();
   return (
-    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'none', zIndex: 10 }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'none', zIndex: 10, background: 'linear-gradient(to bottom, rgba(255,255,255,0.95), transparent)' }}>
       <img 
-         src="https://demokratie-gewinnt.rlp.de/wp-content/uploads/sites/17/2022/07/StiftungHambacherSchloss-Logo-sRGB-450x225.png" 
+         src="https://hambacher-schloss.de/wp-content/themes/HambacherSchloss/img/logos/StiftungHambacherSchloss-Logo-sRGB.svg" 
          alt="Hambacher Schloss Logo" 
-         style={{ height: '60px', pointerEvents: 'auto' }} 
+         style={{ height: '70px', pointerEvents: 'auto' }} 
       />
       
-      <div style={{ pointerEvents: 'auto', display: 'flex', gap: '0.5rem' }}>
+      <div style={{ pointerEvents: 'auto', display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
         <button 
           onClick={() => i18n.changeLanguage('de')}
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.8rem', opacity: i18n.language === 'de' ? 1 : 0.4, transition: 'opacity 0.2s', padding: 0 }}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.6rem', opacity: i18n.language === 'de' ? 1 : 0.3, transition: 'opacity 0.2s', padding: 0 }}
           title="Deutsch"
         >
           🇩🇪
         </button>
         <button 
           onClick={() => i18n.changeLanguage('en')}
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.8rem', opacity: i18n.language === 'en' ? 1 : 0.4, transition: 'opacity 0.2s', padding: 0 }}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.6rem', opacity: i18n.language === 'en' ? 1 : 0.3, transition: 'opacity 0.2s', padding: 0 }}
           title="English"
         >
           🇺🇸
@@ -178,18 +184,18 @@ const ViewMode = () => {
       <TopNavBar />
 
       {focusedBlock && (
-        <div className="glass-panel animate-fade-in" style={{ position: 'absolute', left: '2rem', top: '50%', transform: 'translateY(-50%)', padding: '2rem', minWidth: '300px', pointerEvents: 'auto' }}>
-           <h3 style={{ color: 'white', marginBottom: '0.5rem' }}>{focusedBlock.nickname || 'Castle Builder'}</h3>
-           <p style={{ color: 'var(--text-muted)' }}>Ticket: ••••••••</p>
-           <p style={{ color: 'var(--text-muted)' }}>Located at: [{focusedBlock.position[0]}, {focusedBlock.position[1]}, {focusedBlock.position[2]}]</p>
-           <button className="btn mt-4" style={{ width: '100%', marginTop: '1rem', background: 'rgba(255,255,255,0.1)' }} onClick={() => setFocusedBlockId(null)}>
+        <div className="glass-panel animate-fade-in" style={{ position: 'absolute', left: '2rem', top: '50%', transform: 'translateY(-50%)', padding: '2rem', minWidth: '320px', pointerEvents: 'auto', borderLeft: '4px solid var(--primary-color)' }}>
+           <h3 style={{ marginBottom: '1rem' }}>{focusedBlock.nickname || 'Castle Builder'}</h3>
+           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Ticket: ••••••••</p>
+           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Located at: [{focusedBlock.position[0]}, {focusedBlock.position[1]}, {focusedBlock.position[2]}]</p>
+           <button className="btn" style={{ width: '100%' }} onClick={() => setFocusedBlockId(null)}>
              Close Details
            </button>
         </div>
       )}
 
-      <div style={{ position: 'absolute', bottom: '5.5rem', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-         <div className="glass-panel" style={{ padding: '0.5rem', display: 'flex', gap: '0.5rem', borderRadius: '30px', pointerEvents: 'auto' }}>
+      <div style={{ position: 'absolute', bottom: '4.5rem', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+         <div className="glass-panel" style={{ padding: '0.3rem', display: 'flex', gap: '0.3rem', pointerEvents: 'auto' }}>
             <input 
               type="text" 
               className="input-field" 
@@ -197,9 +203,9 @@ const ViewMode = () => {
               value={ticketInput}
               onChange={(e) => setTicketInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleTicketSubmit(); }}
-              style={{ background: 'transparent', border: 'none', boxShadow: 'none', padding: '0.5rem 1.5rem', outline: 'none' }} 
+              style={{ border: 'none', boxShadow: 'none', padding: '0.5rem 1.5rem', outline: 'none' }} 
             />
-            <button className="btn btn-accent" style={{ borderRadius: '25px', padding: '0.5rem 1.5rem' }} onClick={handleTicketSubmit}>
+            <button className="btn btn-accent" onClick={handleTicketSubmit}>
               {t('checkin.button')}
             </button>
          </div>
@@ -264,7 +270,7 @@ const PlacerPage = () => {
       
       <div className="overlay-ui" style={{ pointerEvents: 'none', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', pointerEvents: 'auto' }}>
-          <button className="btn" onClick={() => navigate('/editor')} style={{ background: 'rgba(255,255,255,0.1)' }} disabled={isPublishing}>
+          <button className="btn" onClick={() => navigate('/editor')} disabled={isPublishing}>
             {t('placer.cancel')}
           </button>
           
@@ -272,7 +278,6 @@ const PlacerPage = () => {
              className="btn btn-accent" 
              onClick={handleConfirm}
              disabled={!previewPosition || isPublishing}
-             style={{ opacity: (previewPosition && !isPublishing) ? 1 : 0.5, cursor: (previewPosition && !isPublishing) ? 'pointer' : 'not-allowed' }}
           >
             {isPublishing ? "Publishing Data..." : t('placer.confirm')}
           </button>

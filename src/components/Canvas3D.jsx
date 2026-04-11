@@ -126,8 +126,8 @@ const ActiveFaceHighlighter = () => {
   return (
     <mesh position={config.pos} rotation={config.rot}>
       <planeGeometry args={config.size} />
-      <meshBasicMaterial ref={matRef} transparent color="#3b82f6" depthWrite={false} />
-      <Edges color="#3b82f6" />
+      <meshBasicMaterial ref={matRef} transparent color="#c69c79" depthWrite={false} />
+      <Edges color="#c69c79" />
     </mesh>
   );
 };
